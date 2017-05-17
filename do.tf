@@ -21,8 +21,8 @@ resource "digitalocean_droplet" "worker" {
 }
 
 resource "digitalocean_loadbalancer" "lb" {
-  name   = "loadbalancer-1"
-  region = "nyc3"
+  name   = "sat-lb-${coalesce(var.location,"nyc3")}-${count.index + 1}"
+  region = "${element(split(",", coalesce(var.location,"nyc3")), count.index)}"
 
   forwarding_rule {
     entry_port     = 80
@@ -32,10 +32,44 @@ resource "digitalocean_loadbalancer" "lb" {
     target_protocol = "http"
   }
 
-  healthcheck {
-    port     = 22
-    protocol = "tcp"
+  forwarding_rule {
+    entry_port     = 81
+    entry_protocol = "http"
+
+    target_port     = 81
+    target_protocol = "http"
   }
 
-  droplet_ids = ["${digitalocean_droplet.web.id}"]
+  forwarding_rule {
+    entry_port     = 443
+    entry_protocol = "tcp"
+
+    target_port     = 443
+    target_protocol = "tcp"
+  }
+
+  forwarding_rule {
+    entry_port     = 444
+    entry_protocol = "tcp"
+
+    target_port     = 444
+    target_protocol = "tcp"
+  }
+
+  forwarding_rule {
+    entry_port     = 9001
+    entry_protocol = "tcp"
+
+    target_port     = 9001
+    target_protocol = "tcp"
+  }
+
+  healthcheck {
+    port                     = 22
+    protocol                 = "tcp"
+    response_timeout_seconds = 1
+    check_interval_seconds   = 3
+  }
+
+  droplet_ids = ["${digitalocean_droplet.worker.*.id}"]
 }

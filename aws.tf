@@ -1,3 +1,10 @@
+provider "aws" {
+  alias = "local"
+  access_key = "${module.creds.aws_access_key_id}"
+  secret_key = "${module.creds.aws_secret_access_key}"
+  region = "${coalesce("${var.aws_region}","us-east-1")}"
+}
+
 resource "aws_instance" "node" {
   provider          = "aws.local"
   ami               = "${coalesce("${var.image}","ami-a3cbb0b4")}"
