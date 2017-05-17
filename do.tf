@@ -21,6 +21,7 @@ resource "digitalocean_droplet" "worker" {
 }
 
 resource "digitalocean_loadbalancer" "lb" {
+  count  = "${var.provider == "do" ? 1 : 0}"
   name   = "sat-lb-${coalesce(var.location,"nyc3")}-${count.index + 1}"
   region = "${element(split(",", coalesce(var.location,"nyc3")), count.index)}"
 
