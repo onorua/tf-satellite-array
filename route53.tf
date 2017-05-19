@@ -13,5 +13,5 @@ resource "aws_route53_record" "balancer" {
   }
 
   set_identifier = "${random_id.loadbalancer.hex}"
-  records = ["${var.balancers}"]
+  records = ["${concat("${digitalocean_loadbalancer.satellite.*.ip}", "${aws_elb.satellite.*.ip}")}"]
 }
