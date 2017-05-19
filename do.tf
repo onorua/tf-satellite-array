@@ -22,7 +22,7 @@ resource "digitalocean_droplet" "node" {
 
 resource "digitalocean_loadbalancer" "satellite" {
   count  = "${var.provider == "do" ? 1 : 0}"
-  name   = "sat-lb-${coalesce(var.location,"nyc3")}-${var.deployment}-${var.colo_name}"
+  name   = "sat-${coalesce(var.location,"nyc3")}-${var.deployment}-${md5(join("", "${digitalocean_droplet.node.*.id}"))}"
   region = "${element(split(",", coalesce(var.location,"nyc3")), count.index)}"
 
   forwarding_rule {

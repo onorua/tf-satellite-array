@@ -7,10 +7,6 @@ variable "name_prefix" {
   description = "The name prefix of the instance, i.e hss for hss-0"
 }
 
-variable "colo_name" {
-  description = "Human readable colo name, such as nyc3-dev-1"
-}
-
 variable "nodes" {
   description = "The number of desired nodes in the array"
 }
