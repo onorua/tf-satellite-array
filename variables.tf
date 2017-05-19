@@ -7,6 +7,12 @@ variable "name_prefix" {
   description = "The name prefix of the instance, i.e hss for hss-0"
 }
 
+variable "weight" {
+  default = "100"
+  description = "Weight of the load balancer, default is 100"
+}
+
+
 variable "nodes" {
   description = "The number of desired nodes in the array"
 }

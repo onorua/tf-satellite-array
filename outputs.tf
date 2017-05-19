@@ -5,3 +5,7 @@ output "balancer_ips" {
 output "balancer_ids" {
   value = ["${concat("${digitalocean_loadbalancer.satellite.*.id}", "${aws_elb.satellite.*.id}")}"]
 }
+
+output "fqdn" {
+  value = ["${aws_route53_record.balancer.*.fqdn}"]
+}
