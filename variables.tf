@@ -12,8 +12,11 @@ variable "nodes" {
 }
 
 variable "location" {
-  default     = ""
   description = "Region, Location, Datacenter, Availability Zone: us-east-1a,nyc3 (Depends on provider)"
+}
+
+variable "deployment" {
+  description = "Deployment type, e.g. production, stage, dev"
 }
 
 variable "aws_region" {

@@ -1,4 +1,4 @@
-resource "digitalocean_droplet" "worker" {
+resource "digitalocean_droplet" "node" {
   name               = "${var.name_prefix}-${count.index + 1}"
   size               = "${coalesce("${var.size}","512mb")}"
   image              = "${coalesce("${var.image}","ubuntu-16-04-x64")}"
@@ -20,7 +20,7 @@ resource "digitalocean_droplet" "worker" {
   }
 }
 
-resource "digitalocean_loadbalancer" "lb" {
+resource "digitalocean_loadbalancer" "satellite" {
   count  = "${var.provider == "do" ? 1 : 0}"
   name   = "sat-lb-${coalesce(var.location,"nyc3")}-${count.index + 1}"
   region = "${element(split(",", coalesce(var.location,"nyc3")), count.index)}"
@@ -68,9 +68,9 @@ resource "digitalocean_loadbalancer" "lb" {
   healthcheck {
     port                     = 22
     protocol                 = "tcp"
-    response_timeout_seconds = 1
+    response_timeout_seconds = 3
     check_interval_seconds   = 3
   }
 
-  droplet_ids = ["${digitalocean_droplet.worker.*.id}"]
+  droplet_ids = ["${digitalocean_droplet.node.*.id}"]
 }
