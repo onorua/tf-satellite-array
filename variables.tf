@@ -4,6 +4,7 @@ variable "provider" {
 }
 
 variable "name_prefix" {
+  default = "sat"
   description = "The name prefix of the instance, i.e hss for hss-0"
 }
 

@@ -1,7 +1,3 @@
-resource "random_id" "loadbalancer" {
-  byte_length = 4
-}
-
 resource "aws_route53_record" "balancer" {
   zone_id = "${var.aws_zone_id}"
   name = "${var.location}.${var.deployment}"
