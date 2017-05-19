@@ -1,7 +1,7 @@
 # S3 - Hostfile Storage
 resource "aws_s3_bucket_object" "host_ips_file" {
     bucket = "tf_af_hostarray"
-    key = "hosts/sat-${var.location}-${var.deployment}-${random_id.loadbalancer.hex}"
+    key = "hosts/${var.name_prefix}-${var.location}-${var.deployment}-${random_id.loadbalancer.hex}"
     content = "${join("\n",formatlist("%v   %v", concat(digitalocean_droplet.node.*.ipv4_address, aws_instance.node.*.public_ip), concat(digitalocean_droplet.node.*.name, aws_instance.node.*.tags.Name)))}\n"
     content_type = "text/plain"
     etag = "${md5("${join("\n",formatlist("%v   %v", concat(digitalocean_droplet.node.*.ipv4_address, aws_instance.node.*.public_ip), concat(digitalocean_droplet.node.*.name, aws_instance.node.*.tags.Name)))}\n")}"
@@ -11,7 +11,7 @@ resource "aws_s3_bucket_object" "host_ips_file" {
 # S3 - Hostfile Storage for private IPs
 resource "aws_s3_bucket_object" "host_private_ips_file" {
     bucket = "tf_af_hostarray"
-    key = "hosts/sat-${var.location}-${var.deployment}-${random_id.loadbalancer.hex}"
+    key = "hosts_private/${var.name_prefix}-${var.location}-${var.deployment}-${random_id.loadbalancer.hex}"
     content = "${join("\n",formatlist("%v %v", concat(digitalocean_droplet.node.*.ipv4_address_private, aws_instance.node.*.private_ip), concat(digitalocean_droplet.node.*.name, aws_instance.node.*.tags.Name)))}\n"
     content_type = "text/plain"
     etag = "${md5("${join("\n",formatlist("%v %v", concat(digitalocean_droplet.node.*.ipv4_address_private,aws_instance.node.*.private_ip), concat(digitalocean_droplet.node.*.name, aws_instance.node.*.tags.Name)))}\n")}"
