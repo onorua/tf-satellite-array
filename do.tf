@@ -20,9 +20,15 @@ resource "digitalocean_droplet" "node" {
   }
 }
 
+
+resource "random_id" "loadbalancer" {
+  prefix = "sat-${coalesce(var.location,"nyc3")}-${var.deployment}-"
+  byte_length = 8
+}
+
 resource "digitalocean_loadbalancer" "satellite" {
   count  = "${var.provider == "do" ? 1 : 0}"
-  name   = "sat-${coalesce(var.location,"nyc3")}-${var.deployment}-${md5(join("", "${digitalocean_droplet.node.*.id}"))}"
+  name   = "${random_id.loadbalancer.dec}"
   region = "${element(split(",", coalesce(var.location,"nyc3")), count.index)}"
 
   forwarding_rule {
