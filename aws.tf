@@ -17,7 +17,7 @@ resource "aws_instance" "node" {
   availability_zone = "${element(split(",", var.location), count.index)}"
 
   tags {
-    Name = "${var.name_prefix}-${var.location}-${var.deployment}-${count.index}"
+    Name = "${var.name_prefix}-${count.index}"
   }
 
   lifecycle {
@@ -36,7 +36,7 @@ resource "aws_instance" "node" {
 
 resource "aws_elb" "satellite" {
   count  = "${var.provider == "aws" ? 1 : 0}"
-  name               = "${var.name_prefix}-lb-${var.location}-${var.deployment}-${random_id.loadbalancer.hex}"
+  name               = "${var.name_prefix}-lb}"
   availability_zones = "${data.aws_availability_zones.available.names}"
 
   access_logs {

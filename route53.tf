@@ -1,6 +1,6 @@
 resource "aws_route53_record" "balancer" {
   zone_id = "${var.aws_zone_id}"
-  name = "${var.location}.${var.deployment}"
+  name = "${var.name_prefix}"
   type = "A"
   ttl = "${var.ttl}"
 
@@ -8,6 +8,6 @@ resource "aws_route53_record" "balancer" {
     weight = "${var.weight}"
   }
 
-  set_identifier = "${random_id.loadbalancer.hex}"
+  set_identifier = "${var.name_prefix}"
   records = ["${concat("${digitalocean_loadbalancer.satellite.*.ip}", "${aws_elb.satellite.*.ip}")}"]
 }

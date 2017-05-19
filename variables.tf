@@ -13,17 +13,12 @@ variable "weight" {
   description = "Weight of the load balancer, default is 100"
 }
 
-
 variable "nodes" {
   description = "The number of desired nodes in the array"
 }
 
 variable "location" {
   description = "Region, Location, Datacenter, Availability Zone: us-east-1a,nyc3 (Depends on provider)"
-}
-
-variable "deployment" {
-  description = "Deployment type, e.g. production, stage, dev"
 }
 
 variable "aws_region" {

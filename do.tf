@@ -1,5 +1,5 @@
 resource "digitalocean_droplet" "node" {
-  name               = "${var.name_prefix}-${var.location}-${var.deployment}-${count.index + 1}"
+  name               = "${var.name_prefix}-${count.index + 1}"
   size               = "${coalesce("${var.size}","512mb")}"
   image              = "${coalesce("${var.image}","ubuntu-16-04-x64")}"
   region             = "${element(split(",", coalesce(var.location,"nyc3")), count.index)}"
@@ -22,7 +22,7 @@ resource "digitalocean_droplet" "node" {
 
 resource "digitalocean_loadbalancer" "satellite" {
   count  = "${var.provider == "do" ? 1 : 0}"
-  name   = "${var.name_prefix}-lb-${coalesce(var.location,"nyc3")}-${var.deployment}-${random_id.loadbalancer.hex}"
+  name   = "${var.name_prefix}-lb"
   region = "${element(split(",", coalesce(var.location,"nyc3")), count.index)}"
 
   forwarding_rule {
